@@ -1,0 +1,71 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    /* background: black; */
+}
+
+.data{
+    height: 100%;
+    width: 30%;
+}
+
+
+#titleText{
+    color: #2ecc71;
+    font-family: monospace;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+#plot{
+    margin: auto;
+    margin: 20px;
+}
+
+#svg{
+    display: block;
+    margin: auto;
+    color: gray;
+}
+
+.bar{
+    fill-opacity: 0.5;
+}
+.bar.male{
+    fill: #1f77b4;
+}
+.bar.female{
+    fill: #e377c2;
+    /* fill-opacity: 0.6; */
+}
+
+.box input[type = "button"]{
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    background-color: #2c3e50;
+    padding: 14px 10px;
+    width:200px;
+    outline: none;
+    color: white;
+    border-radius: 24px;
+    transition: 0.25s;
+}
+.box input[type = "button"]:hover{
+    border-color: #2ecc71;
+    
+}
+
+.grid line {
+    stroke: lightgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+}
+  
+.grid path {
+stroke-width: 0;
+}

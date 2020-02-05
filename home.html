@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+    <link href="home.css" rel="stylesheet" type="text/css">
+    <title>Test for D3.js</title>
+</head>
+<body>
+    
+    <div id="titleText">
+        <h1>Data Visualisation Tool</h1>
+    </div>
+    
+    <div class="data">
+        <form class="box" id=submitData>
+                <input type="file" id="selectfile" 
+                accept=".csv"
+                style="display: none;" onchange="useCsv(this.files)">
+                <input type="button" id="filebtn" value="Select File" onclick="document.getElementById('selectfile').click()">
+        </form>
+        <h2 id=filename></h2>
+    </div>
+    
+    <div id="plot"></div>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="JS/test.js"></script>
+</body>
