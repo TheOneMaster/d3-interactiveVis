@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <head>
-    <title>Data Visualisation - Indian Population</title>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>data vis</title>
+    <link href="home.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    <script src="JS/test.js>"
+    <div id="titleText">
+        <h1>Data Visualisation - Indian Population</h1>
+    </div>
+    
+    <div class="data">
+        <div class="summary">
+            <span id="totalPop"></span>
+            <table class="table"></table>
+        </div>
+    </div>
+    <div id="barplot"></div>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="JS/test.js"></script>
+    <script>
+        useCsv('data/final.csv')
+    </script>
 </body>

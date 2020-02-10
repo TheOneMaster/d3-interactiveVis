@@ -5,39 +5,23 @@ body{
     /* background: black; */
 }
 
+/* CSS for Classes */
 .data{
     height: 100%;
     width: 30%;
+    /* display: block; */
+    float: left;
 }
 
+/* 
 
-#titleText{
-    color: #2ecc71;
-    font-family: monospace;
-    margin-left: 20px;
-    margin-top: 20px;
-}
+    CSS for the form
 
-#plot{
-    margin: auto;
-    margin: 20px;
-}
+*/
 
-#svg{
-    display: block;
-    margin: auto;
-    color: gray;
-}
-
-.bar{
-    fill-opacity: 0.5;
-}
-.bar.male{
-    fill: #1f77b4;
-}
-.bar.female{
-    fill: #e377c2;
-    /* fill-opacity: 0.6; */
+.box{
+    display: inline-block;
+    margin: 0px 20px;
 }
 
 .box input[type = "button"]{
@@ -68,4 +52,88 @@ body{
   
 .grid path {
 stroke-width: 0;
+}
+
+/* 
+
+    Table CSS 
+
+*/
+
+.table{
+    border-collapse: collapse;
+    margin: 20px;
+    float: right;
+}
+
+/* Apply to all rows in the table body */
+.table td{
+    border-top: 1px solid;
+    padding: 5px;
+}
+/* Apply to all cells that are adjacent to one another in the body. https://stackoverflow.com/a/22775925 */
+.table td + td{
+    border-left:2px solid;  
+}
+
+/* Apply to all cells that are adjacent in the head */
+.table th + th{
+    border-left: 2px solid;
+}
+
+
+/* 
+
+    Plot CSS
+
+*/
+
+.label{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+
+.bar{
+    fill-opacity: 0.5;
+}
+.bar:hover {
+    fill: orange;
+}
+
+
+/* CSS for ids */
+#titleText{
+    color: #2ecc71;
+    font-family: monospace;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+#plot{
+    margin: auto;
+    margin: 20px;
+}
+
+#svg{
+    display: block;
+    margin: auto;
+    color: gray;
+}
+
+#filename{
+    text-align: center;
+    margin: auto;
+    text-align: center;
+    display: inline-block;
+    margin: 20px;
+}
+
+#totalPop{
+    margin: 20px;
+}
+
+#plot_title{
+    font-weight: bold;
+    fill: #2ecc71;
 }
