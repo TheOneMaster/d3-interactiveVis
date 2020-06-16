@@ -8,6 +8,7 @@ function useCsv(fileList){
   plot function. 
   */
   const filetype = typeof(fileList);
+
   if (filetype == 'object') {
       const fileData = fileList[0];
       const name = fileData.name;
@@ -21,7 +22,8 @@ function useCsv(fileList){
       }
       reader.readAsDataURL(fileData);
       document.getElementById("filename").innerHTML = name;
-  } else {
+
+  } else if (filetype == "string") {
       d3.csv(fileList, d3.autoType)
           .then(data => plotData(data));
   }
@@ -29,7 +31,7 @@ function useCsv(fileList){
 
 function plotData(data) {
 
-  // Define constants for the function
+  // Define basic data constants for the function
 
   // Dimensions of the entire figure
   const figHeight = 500;
@@ -54,14 +56,14 @@ function plotData(data) {
   const femaleStart = width - maleEnd;
 
   const totalPop = d3.sum(data, d => d.male+d.female);
-  let percentage = val => val/totalPop;
+  const percentage = val => val/totalPop;
 
   /*
     This block is used to show summary statistics of the given data.
     They are displayed to the left div in the HTML doc. 
   */
-   document.getElementById("totalPop").innerHTML = `Total population: ${d3.format(",.2r")(totalPop)}`;
-   tabulate(data);
+  document.getElementById("totalPop").innerHTML = `Total population: ${d3.format(",.2r")(totalPop)}`;
+  tabulate(data);
 
   // Used to set the max value of the scale on both sides for easy comparison between male and female
   const maxVal = Math.max(
@@ -69,19 +71,31 @@ function plotData(data) {
     d3.max(data, d => percentage(d.female))
   );
 
+  const totalMale = d3.sum(data, d => d.male);
+  const totalFemale = totalPop - totalMale;
+
   /*
     Create the figure element. Not used for plotting the data, mainly used for adding labels and other data
     to the figure. 
   */
 
-  let svg = d3.select("#barplot").append("svg")
+  // Tooltip for the plot
+  // d3.select("#barplot")
+  //   // .style("position", "absolute")  
+  //   .append("div")
+  //     .attr("id", "tooltip")
+  //     .style("position", "absolute")
+  //     .style("visibility", "hidden");
+  //     // .style("background", "black");
+
+  const svg = d3.select("#barplot").append("svg")
     .attr("width", innerWidth)
     .attr("height", innerHeight)
     .append("g")
       .attr("transform", translate(figMargin.left, figMargin.top));
 
   //Add Labels to the plot. Title for the plot, x and y labels, and the male/female label  
-  let x_center = padding.left + regionWidth + padding.center;
+  const x_center = padding.left + regionWidth + padding.center;
 
   // Plot title
   svg.append("text")
@@ -115,6 +129,13 @@ function plotData(data) {
     .text("Male")
     .style("text-anchor", "middle")
     .style("font-style", "italic");
+  
+  svg.append("text")
+    .attr("x", padding.left + regionWidth/2)
+    .attr("y", padding.top + 10)
+    .text(d3.format(".3s")(totalMale))
+    .style("text-anchor", "middle")
+    .style("font-style", "italic");
 
   // Female label (over female section)
   svg.append("text")
@@ -124,29 +145,36 @@ function plotData(data) {
     .style("text-anchor", "middle")
     .style("font-style", "italic");
 
+  svg.append("text")
+    .attr("x", innerWidth - (padding.right + regionWidth/2))
+    .attr("y", padding.top + 10)
+    .text(d3.format(".3s")(totalFemale))
+    .style("text-anchor", "middle")
+    .style("font-style", "italic");
+
   /*
     Actual visualisation of the data is done in this element. Male and female bars are drawn along 
     with X and Y axes.
   */
 
-  let plot = svg.append("g")
+  const plot = svg.append("g")
     .attr("class", "plot")
     .attr("transform", translate(padding.left, padding.top))
-  
+
   // Scales for the Axes
 
-  let xScaleRight = d3.scaleLinear()
+  const xScaleRight = d3.scaleLinear()
     .domain([0, maxVal])
     .range([0, regionWidth])
     .nice();
 
   // Scale is reversed since it is going from right to left
-  let xScaleLeft = d3.scaleLinear()
+  const xScaleLeft = d3.scaleLinear()
     .domain([0, maxVal])
     .range([regionWidth, 0])
     .nice();
 
-  let yScale = d3.scaleBand()
+  const yScale = d3.scaleBand()
     .domain(data.map(d => d.age))
     .range([height, 0])
     .padding(0.1);
@@ -154,18 +182,18 @@ function plotData(data) {
   // Axes
 
   // X axes are formatted to 2 sig fig percentages (Ex: 0.10 -> 10%)
-  let xAxisLeft = d3.axisBottom(xScaleLeft)
+  const xAxisLeft = d3.axisBottom(xScaleLeft)
     .tickFormat(d3.format(".2p"));
-  let xAxisRight = d3.axisBottom(xScaleRight)
+  const xAxisRight = d3.axisBottom(xScaleRight)
     .tickFormat(d3.format(".2p"));
 
-  let yAxis = d3.axisRight(yScale)
+  const yAxis = d3.axisRight(yScale)
     .tickPadding((padding.center+14)/2);
-  let yAxisRight = d3.axisLeft(yScale)
+  const yAxisRight = d3.axisLeft(yScale)
     .tickFormat('');
 
   // Draw Axes on the plot
-  let xAxes = plot.append("g")
+  const xAxes = plot.append("g")
     .attr("class", "xaxis");
 
   xAxes.append("g")
@@ -178,7 +206,7 @@ function plotData(data) {
     .attr("transform", translate(femaleStart, height))
     .call(xAxisRight);
 
-  let yAxes = plot.append("g")
+  const yAxes = plot.append("g")
     .attr("class", "yaxis");
 
   yAxes.append("g")
@@ -196,12 +224,12 @@ function plotData(data) {
   // Creates bars for males and females
 
   // Group for male bars
-  let maleData = plot.append("g")
+  const maleData = plot.append("g")
     .attr("class", "male")
     .attr("transform", `${translate(maleEnd, 0)}scale(-1, 1)`);
 
   // Group for female bars
-  let femaleData = plot.append("g")
+  const femaleData = plot.append("g")
     .attr("class", "female")
     .attr("transform", `${translate(femaleStart, 0)}scale(1, 1)`);
 
@@ -214,7 +242,10 @@ function plotData(data) {
       .attr("x", 0)
       .attr("width", d => regionWidth - xScaleLeft(percentage(d.male)))
       .attr("height", yScale.bandwidth())
-      .on("click", onClick);
+      .on("click", onClick)
+      .on("mouseover", onMouseOver)
+      .on("mouseleave", onMouseLeave)
+      .on("mousemove", onMouseMove);
 
   // Draw Female bars
   femaleData.selectAll("bar")
@@ -225,26 +256,65 @@ function plotData(data) {
       .attr("x", 0)
       .attr("width", d => xScaleRight(percentage(d.female)))
       .attr("height", yScale.bandwidth())
-      .on("click", onClick);
+      .on("click", onClick)
+      .on("mouseover", onMouseOver)
+      .on("mouseleave", onMouseLeave)
+      .on("mousemove", onMouseMove);
 
 
   // Helper functions
 
   function onClick(data) {
     
-    let selected = this.classList[2] == "selected" ? true : false;
+    const selected = this.classList[2] == "selected" ? true : false;
     
     if (selected) {
       d3.select(this).classed("selected", false);
     } else {
-      d3.selectAll(".bar.selected").classed("selected", false);
+      d3.select(".bar.selected").classed("selected", false);
       d3.select(this).classed("selected", true);
     }  
 
   }
 
-  function onHover(data) {
+  function onMouseOver(data) {
+    const gender = this.classList[0];
+    const tooltip = d3.select("#tooltip");
+
+    d3.select("#tooltip-value").text(`${data[gender]}`);
+
+    tooltip.style("visibility", "visible")
+  
+      
+    // pass
+  }
+
+  function onMouseMove (data) {
+    const tooltip = d3.select("#tooltip");
+    const side = this.classList[0];
+
+    const x_scale = side == 'male' ? xScaleLeft(percentage(data[side])) : xScaleRight(percentage(data[side])) + femaleStart;
+    const y_scale = yScale(data.age);
+
     
+    const test = this.getBoundingClientRect().y;
+    console.log(test)
+
+    const x_pos = figMargin.left + padding.left + x_scale + 10;
+    const y_pos = figMargin.top + padding.top + yScale(data.age) + 20;
+
+    // console.log(+test)
+    console.log(y_pos)
+    tooltip.style("top", `${test}px`)
+      .style("left", `${x_pos}px`);
+  }
+
+  function onMouseLeave(data) {
+    const tooltip = d3.select("#tooltip");
+
+    d3.select("#tooltip-value").text("");
+
+    tooltip.style("visibility", "hidden");
   }
 
   function translate(x, y) {

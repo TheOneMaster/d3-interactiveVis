@@ -4,11 +4,14 @@
     <title>Test for D3.js</title>
 </head>
 <body>
+    <header>
+        <div id="titleText">
+            <h1 style="display: inline;">Data Visualisation Tool</h1>
+            <a href="test.html"><input type="button" value="Select Test Data" id="test_data"></a>
+        </div>
+    </header>
     
-    <div id="titleText">
-        <h1 style="display: inline;">Data Visualisation Tool</h1>
-        <a href="test.html"><input type="button" value="Select Test Data"></a>
-    </div>
+    
     
     <div class="data">
         <div>
@@ -20,11 +23,15 @@
         </div>        
     </div>
     
-    <div id="barplot"></div>
+    <div id="barplot">
+        <div id="tooltip" style="visibility: hidden;">
+            <b>Population Value: <span id="tooltip-value"></span></b>
+        </div>
+    </div>
 
     <div class="summary">
-        <span id="totalPop"></span>
         <table class="table"></table>
+        <span id="totalPop"></span>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="JS/test-d3.js"></script>
